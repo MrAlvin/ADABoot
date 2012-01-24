@@ -1,0 +1,3 @@
+Arduino bootloaders, based on ADABoot from 2009-03-25
+
+I needed WDT functionality (interrupt mode only) and low power settings on ATmega8, ATmega328, ATmega328p and ATmega1280.
