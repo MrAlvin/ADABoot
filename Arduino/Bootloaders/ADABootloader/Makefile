@@ -6,6 +6,7 @@
 #
 # Brian B Riley  <brianbr@wulfden.org>  -- BBR
 #
+# 20120114: Modfified for ADAboot for 1280 (MrAlvin)
 # 20090413: Modfified for ADAboot for 644P (BBR)
 # 20090325: Modified for the ADABoot for 168 and 328 (BBR) 
 # 20050718: Created - E. Lins
@@ -110,7 +111,7 @@ atmega328p: AVR_FREQ = 16000000L
 atmega328p: LDSECTION  = --section-start=.text=0x7800
 atmega328p: ADABoot_328.hex
 
-atmega328p_isp: atmega328
+atmega328p_isp: atmega328p
 atmega328p_isp: TARGET = ADABoot_328
 atmega328p_isp: MCU_TARGET = atmega328p
 atmega328p_isp: HFUSE = DA
@@ -132,6 +133,21 @@ atmega644p_isp: HFUSE = DC
 atmega644p_isp: LFUSE = FF
 atmega644p_isp: EFUSE = FD
 atmega644p_isp: isp
+
+mega: TARGET = atmega1280
+mega: MCU_TARGET = atmega1280
+mega: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=0' -DBAUD_RATE=57600 '-DADABOOT=4' '-DWATCHDOG_MODS'
+mega: AVR_FREQ = 16000000L 
+mega: LDSECTION  = --section-start=.text=0x1F000
+mega: ADABoot_1280.hex
+
+mega_isp: mega
+mega_isp: TARGET = atmega1280
+mega_isp: MCU_TARGET = atmega1280
+mega_isp: HFUSE = DA
+mega_isp: LFUSE = FF
+mega_isp: EFUSE = F5
+mega_isp: isp
 
 
 isp: $(TARGET)
