@@ -1,8 +1,8 @@
-Arduino bootloaders, based on ADABoot from 2009-03-25
+This is a compilation of many details for the ADABoot bootloader for Arduino, so it is easy to compile an ADABoot style bootloader for most (if not all) official Arduino boards and for most 40-pin AVRs (like 644 and 1284). I started out with the 2009-03-25 version from wulfden.org (downloaded January 2012) and grew it from there.
 
-I needed WDT functionality (interrupt mode only) and low-power-sleep settings on ATmega8, ATmega328, ATmega328p and ATmega1280.
+I needed WDT functionality (interrupt mode only) to just work with low-power-sleep settings and I wanted my sketches to always begin running as soon after power-on/reset as possible, and I find that the ADABoot bootloader does this very efficiently on the ATmega328p and ATmega1280.
 
-Tested under Arduino 1.0 IDE on Windows 7, using WestFW's omake.bat, which provides an easy way to use make/makefiles on Windows.
+Tested on Windows 7, compiled on windows using WestFW's omake.bat (with Arduino 1.0 IDE), which provides an easy way to use make/makefiles on Windows.
 
 
 HowTo:
