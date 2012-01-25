@@ -1,3 +1,34 @@
 Arduino bootloaders, based on ADABoot from 2009-03-25
 
-I needed WDT functionality (interrupt mode only) and low power settings on ATmega8, ATmega328, ATmega328p and ATmega1280.
+I needed WDT functionality (interrupt mode only) and low-power-sleep settings on ATmega8, ATmega328, ATmega328p and ATmega1280.
+
+Tested under Arduino 1.0 IDE on Windows 7, using WestFW's omake.bat, which provides an easy way to use make/makefiles on Windows.
+
+
+HowTo:
+------
+  know this path in your Arduino 1.0 install: 
+   ..\arduino-1.0\hardware\arduino\bootloaders\ADABootLoader
+ 
+  in this repository you will see the path: 
+  arduino\bootloaders\ADABootLoader
+
+  copy files from this repository (ADABoot) to fit in parallel into the path mentioned above
+
+  Contents from the file ..\arduino-1.0\hardware\arduino\boards-ADABoot.txt  can be copied into the file ..\arduino-1.0\hardware\arduino\boards.txt, below existing text in boards.txt
+
+  To compile; open the command prompt and change the path to ADABootloader. 
+  There you can use the omake.bat batch file to perform compilation of files.
+  
+  Example of commands
+         omake  atmega168
+         omake  atmega328p
+		 omake  mega
+		 omake  atmega644p
+
+		 
+Additions so far:
+  - added definitions for Mega (1280) to "ATmegaBOOT_168.c" and "Makefile"
+  - added definitions for all standard Arduino's to "Makefile"
+	
+		 

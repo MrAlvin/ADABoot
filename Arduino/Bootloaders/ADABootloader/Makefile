@@ -88,6 +88,110 @@ OBJDUMP        = avr-objdump
 
 all:
 
+#####    From here  - section copied in from Sanguino-0023r2   ######
+
+lilypad: TARGET = lilypad
+lilypad: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>1' '-DNUM_LED_FLASHES=3'
+lilypad: AVR_FREQ = 8000000L
+lilypad: ADABoot_lilypad.hex
+
+lilypad_isp: lilypad
+lilypad_isp: TARGET = lilypad
+lilypad_isp: HFUSE = DD
+lilypad_isp: LFUSE = E2
+lilypad_isp: EFUSE = 00
+lilypad_isp: isp
+
+lilypad_resonator: TARGET = lilypad_resonator
+lilypad_resonator: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=3'
+lilypad_resonator: AVR_FREQ = 8000000L
+lilypad_resonator: ADABoot_lilypad_resonator.hex
+
+lilypad_resonator_isp: lilypad_resonator
+lilypad_resonator_isp: TARGET = lilypad_resonator
+lilypad_resonator_isp: HFUSE = DD
+lilypad_resonator_isp: LFUSE = C6
+lilypad_resonator_isp: EFUSE = 00
+lilypad_resonator_isp: isp
+
+pro8: TARGET = pro_8MHz
+pro8: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=1' '-DWATCHDOG_MODS'
+pro8: AVR_FREQ = 8000000L
+pro8: ADABoot_pro_8MHz.hex
+
+pro8_isp: pro8
+pro8_isp: TARGET = pro_8MHz
+pro8_isp: HFUSE = DD
+pro8_isp: LFUSE = C6
+pro8_isp: EFUSE = 00
+pro8_isp: isp
+
+pro16: TARGET = pro_16MHz
+pro16: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=1' '-DWATCHDOG_MODS'
+pro16: AVR_FREQ = 16000000L
+pro16: ADABoot_pro_16MHz.hex
+
+pro16_isp: pro16
+pro16_isp: TARGET = pro_16MHz
+pro16_isp: HFUSE = DD
+pro16_isp: LFUSE = C6
+pro16_isp: EFUSE = 00
+pro16_isp: isp
+
+pro20: TARGET = pro_20mhz
+pro20: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=1' '-DWATCHDOG_MODS'
+pro20: AVR_FREQ = 20000000L
+pro20: ADABoot_pro_20mhz.hex
+
+pro20_isp: pro20
+pro20_isp: TARGET = pro_20mhz
+pro20_isp: HFUSE = DD
+pro20_isp: LFUSE = C6
+pro20_isp: EFUSE = 00
+pro20_isp: isp
+
+diecimila: TARGET = diecimila
+diecimila: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=1'
+diecimila: AVR_FREQ = 16000000L 
+diecimila: ADABoot_diecimila.hex
+
+diecimila_isp: diecimila
+diecimila_isp: TARGET = diecimila
+diecimila_isp: HFUSE = DD
+diecimila_isp: LFUSE = FF
+diecimila_isp: EFUSE = 00
+diecimila_isp: isp
+
+ng: TARGET = ng
+ng: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>1' '-DNUM_LED_FLASHES=3'
+ng: AVR_FREQ = 16000000L
+ng: ADABoot_ng.hex
+
+ng_isp: ng
+ng_isp: TARGET = ng
+ng_isp: HFUSE = DD
+ng_isp: LFUSE = FF
+ng_isp: EFUSE = 00
+ng_isp: isp
+
+
+atmega328_pro8: TARGET = atmega328_pro_8MHz
+atmega328_pro8: MCU_TARGET = atmega328p
+atmega328_pro8: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=1' -DBAUD_RATE=57600 -DDOUBLE_SPEED
+atmega328_pro8: AVR_FREQ = 8000000L 
+atmega328_pro8: LDSECTION  = --section-start=.text=0x7800
+atmega328_pro8: ADABoot_atmega328p_pro_8MHz.hex
+
+atmega328_pro8_isp: atmega328_pro8
+atmega328_pro8_isp: TARGET = atmega328_pro_8MHz
+atmega328_pro8_isp: MCU_TARGET = atmega328p
+atmega328_pro8_isp: HFUSE = DA
+atmega328_pro8_isp: LFUSE = FF
+atmega328_pro8_isp: EFUSE = 05
+atmega328_pro8_isp: isp
+
+#####    To Here   -  section copied in from Sanguino-0023r2   ########
+#########  needs testing on actual chips
 
 atmega168: TARGET = atmega168
 atmega168: MCU_TARGET = atmega168
