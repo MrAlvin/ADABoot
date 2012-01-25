@@ -6,6 +6,8 @@
 /*                                                        */
 /* ATmegaBOOT.c                                           */
 /*                                                        */
+/* 20120124: added 1284p from Sanguino 0023r2 (MrAlvin)   */
+/*           needs testing on actual chip                 */
 /* 20120115: integrated Mega changes by MrAlvin           */
 /* 20090325: BBR applied ADABoot fixes to the 328 enabled */
 /*           bootloader code of Arduino-0014. Many ADABOOT*/
@@ -129,7 +131,8 @@
 #define BL1     PINF6
 #elif defined __AVR_ATmega1280__ 
 /* we just don't do anything for the MEGA and enter bootloader on reset anyway*/
-
+#elif defined __AVR_ATmega1284P__
+/* we just don't do anything for the MEGA and enter bootloader on reset anyway*/
 #else
 /* other ATmegas have only one UART, so only one pin is defined to enter bootloader */
 #define BL_DDR  DDRD
@@ -147,6 +150,12 @@
 #define LED_PORT PORTB
 #define LED_PIN  PINB
 #define LED      PINB7
+
+#elif defined __AVR_ATmega1284P__
+#define LED_DDR  DDRB
+#define LED_PORT PORTB
+#define LED_PIN  PINB
+#define LED      PINB0
 
 #elif defined(__AVR_ATmega644P__) || defined(__AVR_ATmega644__) || defined(__AVR_ATmega344P__)
 #define LED_DDR  DDRB
@@ -178,6 +187,11 @@
 #define SIG2	0x97
 #define SIG3	0x03
 #define PAGE_SIZE	0x80U	//128 words
+
+#elif defined __AVR_ATmega1284P__
+#define SIG2	0x97
+#define SIG3	0x05
+#define PAGE_SIZE	0x080U   //128 words
 
 #elif defined __AVR_ATmega1281__
 #define SIG2	0x97
@@ -358,7 +372,7 @@ int main(void)
 	}
 #endif
 
-#if defined __AVR_ATmega1280__
+#if defined __AVR_ATmega1280__   || defined __AVR_ATmega1284P__
 	/* the mega1280 chip has four serial ports ... we could eventually use any of them, or not? */
 	/* however, we don't wanna confuse people, to avoid making a mess, we will stick to RXD0, TXD0 */
 	bootuart = 1;
@@ -390,7 +404,7 @@ int main(void)
 
 
 	/* initialize UART(s) depending on CPU defined */
-#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__)
+#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__)  || defined(__AVR_ATmega1284P__)
 	if(bootuart == 1) {
 		UBRR0L = (uint8_t)(F_CPU/(BAUD_RATE*16L)-1);
 		UBRR0H = (F_CPU/(BAUD_RATE*16L)-1) >> 8;
@@ -462,7 +476,7 @@ int main(void)
     /* ADABOOT will do two series of flashes. first 4 - signifying ADABOOT  */
     /* then a pause and another flash series signifying ADABOOT sub-version */
 
-#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__)
+#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1284P__)
 	// 4x for UART0, 5x for UART1
 	flash_led(NUM_LED_FLASHES + bootuart);
 #else
@@ -638,14 +652,14 @@ int main(void)
 			else {					        //Write to FLASH one page at a time
 				if (address.byte[1]>127) address_high = 0x01;	//Only possible with m128, m256 will need 3rd address byte. FIXME
 				else address_high = 0x00;
-#if defined( __AVR_ATmega128__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__)
+#if defined( __AVR_ATmega128__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__) || defined(__AVR_ATmega1284P__)
 				RAMPZ = address_high;
 #endif
 				address.word = address.word << 1;	        //address * 2 -> byte location
 				/* if ((length.byte[0] & 0x01) == 0x01) length.word++;	//Even up an odd number of bytes */
 				if ((length.byte[0] & 0x01)) length.word++;	//Even up an odd number of bytes
 				cli();					//Disable interrupts, just to be sure
-#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__)
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__)  || defined(__AVR_ATmega1284P__)
 				while(bit_is_set(EECR,EEPE));			//Wait for previous EEPROM writes to complete
 #else				
 				while(bit_is_set(EECR,EEPE));			//Wait for previous EEPROM writes to complete
@@ -744,7 +758,7 @@ int main(void)
 					 "rjmp	write_page	\n\t"
 					 "block_done:		\n\t"
 					 "clr	__zero_reg__	\n\t"	//restore zero register
-#if defined(__AVR_ATmega168__)  || defined(__AVR_ATmega328P__) || defined(__AVR_ATmega644__)  || defined(__AVR_ATmega644P__) || defined(__AVR_ATmega324P__) || defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__)
+#if defined(__AVR_ATmega168__)  || defined(__AVR_ATmega328P__) || defined(__AVR_ATmega644__)  || defined(__AVR_ATmega644P__) || defined(__AVR_ATmega324P__) || defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__) || __AVR_ATmega1284P__
 					 : "=m" (SPMCSR) : "M" (PAGE_SIZE) : "r0","r16","r17","r24","r25","r28","r29","r30","r31"
 #else
 					 : "=m" (SPMCR) : "M" (PAGE_SIZE) : "r0","r16","r17","r24","r25","r28","r29","r30","r31"
@@ -766,7 +780,7 @@ int main(void)
 	else if(ch=='t') {
 		length.byte[1] = getch();
 		length.byte[0] = getch();
-#if defined __AVR_ATmega128__ || defined(__AVR_ATmega1280__)
+#if defined __AVR_ATmega128__ || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1284P__)
 		if (address.word>0x7FFF) flags.rampz = 1;		// No go with m256, FIXME
 		else flags.rampz = 0;
 #endif
@@ -790,7 +804,7 @@ int main(void)
 				else {
 
 					if (!flags.rampz) putch(pgm_read_byte_near(address.word));
-#if defined(__AVR_ATmega128__)  || defined(__AVR_ATmega1280__)
+#if defined(__AVR_ATmega128__)  || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1284P__)
 					else putch(pgm_read_byte_far(address.word + 0x10000));
 					// Hmmmm, yuck  FIXME when m256 arrvies
 #endif
@@ -984,7 +998,7 @@ void puthex(char ch) {
 
 void putch(char ch)
 {
-#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__)
+#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__)  || defined(__AVR_ATmega1284P__)
 	if(bootuart == 1) {
 		while (!(UCSR0A & _BV(UDRE0)));
 		UDR0 = ch;
@@ -1006,7 +1020,7 @@ void putch(char ch)
 
 char getch(void)
 {
-#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__)
+#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__)  || defined(__AVR_ATmega1284P__)
 	uint32_t count = 0;
 
 #ifdef ADABOOT
@@ -1075,7 +1089,7 @@ char getch(void)
 void getNch(uint8_t count)
 {
 	while(count--) {
-#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__)
+#if defined(__AVR_ATmega128__) || defined(__AVR_ATmega1280__)  || defined(__AVR_ATmega1284P__)
 		if(bootuart == 1) {
 			while(!(UCSR0A & _BV(RXC0)));
 			UDR0;

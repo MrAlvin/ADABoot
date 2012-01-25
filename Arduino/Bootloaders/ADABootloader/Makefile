@@ -191,7 +191,8 @@ atmega328_pro8_isp: EFUSE = 05
 atmega328_pro8_isp: isp
 
 #####    To Here   -  section copied in from Sanguino-0023r2   ########
-#########  needs testing on actual chips
+#########  compiles fine, but needs testing on actual chip : 2012-01-24
+
 
 atmega168: TARGET = atmega168
 atmega168: MCU_TARGET = atmega168
@@ -253,6 +254,22 @@ mega_isp: LFUSE = FF
 mega_isp: EFUSE = F5
 mega_isp: isp
 
+
+# compiles fine, but needs testing on actual chip : 2012-01-24
+atmega1284p: TARGET = atmega1284p
+atmega1284p: MCU_TARGET = atmega1284p
+atmega1284p: CFLAGS += '-DMAX_TIME_COUNT=F_CPU>>4' '-DNUM_LED_FLASHES=0' '-DBAUD_RATE=57600'
+atmega1284p: AVR_FREQ = 16000000L 
+atmega1284p: LDSECTION  = --section-start=.text=0x1F800
+atmega1284p: $(PROGRAM)_atmega1284p.hex
+
+atmega1284p_isp: atmega1284p
+atmega1284p_isp: TARGET = atmega1284p
+atmega1284p_isp: MCU_TARGET = atmega1284p
+atmega1284p_isp: HFUSE = DC
+atmega1284p_isp: LFUSE = FF
+atmega1284p_isp: EFUSE = FD
+atmega1284p_isp: isp
 
 isp: $(TARGET)
 	$(ISPFUSES)
