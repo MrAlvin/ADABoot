@@ -1,6 +1,6 @@
 ##############################################################
 
-ADABoot168.name=ADABoot loader w/ATmega168
+ADABoot168.name=ADABoot on ATmega168 (16MHz)
 
 ADABoot168.upload.protocol=stk500
 ADABoot168.upload.maximum_size=14336
@@ -19,10 +19,15 @@ ADABoot168.build.f_cpu=16000000L
 ADABoot168.build.core=arduino
 
 ##############################################################
+# TESTED
+# 2012-01-26 Compiled bootloader and loaded to chip
+# 2012-01-26 Tested (Hello_World_Blink) sketch
+# 2012-01-26 Tested WDT (Serial Sleep w/WDT) sketch
+# 2012-01-26 Tested (Fusebytes) sketch
 
-ADABoot328p.name=ADABoot loader w/ATmega328p
+ADABoot328p.name=ADABoot on ATmega328p (16MHz)
 
-ADABoot328p.upload.protocol=stk500
+ADABoot328p.upload.protocol=arduino
 ADABoot328p.upload.maximum_size=30720
 ADABoot328p.upload.speed=57600
 
@@ -30,17 +35,23 @@ ADABoot328p.bootloader.low_fuses=0xFF
 ADABoot328p.bootloader.high_fuses=0xDA
 ADABoot328p.bootloader.extended_fuses=0x05
 ADABoot328p.bootloader.path=ADABootLoader
-ADABoot328p.bootloader.file=ADABoot_328.hex
+ADABoot328p.bootloader.file=ADABoot_328p.hex
 ADABoot328p.bootloader.unlock_bits=0x3F
 ADABoot328p.bootloader.lock_bits=0x0F
 
 ADABoot328p.build.mcu=atmega328p
 ADABoot328p.build.f_cpu=16000000L
 ADABoot328p.build.core=arduino
+ADABoot328p.build.variant=standard
 
 ##############################################################
+# TESTED
+# 2012-01-26 Compiled bootloader and loaded to chip
+# 2012-01-26 Tested (Hello_World_Blink) sketch
+# 2012-01-26 Tested WDT (Serial Sleep w/WDT) sketch
+# 2012-01-26 Tested (Fusebytes) sketch
 
-ADABoot1280.name=ADABoot loader w/ATmega1280
+ADABoot1280.name=ADABoot on ATmega1280  (16MHz)
 
 ADABoot1280.upload.protocol=arduino
 ADABoot1280.upload.maximum_size=126976

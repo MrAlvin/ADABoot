@@ -23,4 +23,3 @@ CALL omake ng
 CALL omake atmega328_pro8 
 CALL omake atmega1284p  
      
-REM CALL omake atmega328bb   (untested)

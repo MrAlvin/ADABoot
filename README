@@ -35,5 +35,5 @@ Additions so far:
   - added an "omakeall.bat" that will compile *.hex files for all current definitions in "Makefile".  *.hex files compiles on my system, but may need testing on actual chips, to know that everything is fine.
   - added definitions for 1284p to "ATmegaBOOT_168.c" and "Makefile". Compiles fine, but needs testing on actual chip
   
-	
+  - has started experimenting a bit with Optiboot as well	
 		 
